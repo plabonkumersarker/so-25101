@@ -1105,17 +1105,22 @@
         }
 
         function closeModal() {
-            const modalOverlay = document.getElementById('modalOverlay');
-            modalOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
+    const modalOverlay = document.getElementById('modalOverlay');
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
 
-        function closeModalOnOverlay(event) {
-            if (event.target === event.currentTarget) {
-                closeModal();
-            }
-        }
+function closeModalOnOverlay(event) {
+    if (event.target === event.currentTarget) {
+        closeModal();
+    }
+}
 
+// Make them global
+window.closeModal = closeModal;
+window.closeModalOnOverlay = closeModalOnOverlay;
+window.handleSearch = handleSearch;
+        
         function highlightRoll(roll) {
             document.querySelectorAll('.roll-card').forEach(card => {
                 card.classList.remove('active');
