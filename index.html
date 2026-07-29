@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SO-25101 (Written + Viva)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 1px solid #30363d;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #f0f6fc;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #8b949e;
+            font-weight: 400;
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #161b22;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #58a6ff;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .search-section {
+            background-color: #161b22;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #30363d;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        #searchInput {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 16px;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: #f0f6fc;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        #searchInput:focus {
+            border-color: #58a6ff;
+        }
+
+        #searchInput::placeholder {
+            color: #484f58;
+        }
+
+        #searchBtn {
+            padding: 12px 24px;
+            background-color: #238636;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #searchBtn:hover {
+            background-color: #2ea043;
+        }
+
+        .search-instruction {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        .legend-color.qualified {
+            background-color: #238636;
+        }
+
+        .legend-color.not-qualified {
+            background-color: #484f58;
+        }
+
+        .rolls-section {
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        .rolls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .roll-card {
+            padding: 15px 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+
+        .roll-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .roll-card.qualified {
+            background-color: #238636;
+            color: white;
+        }
+
+        .roll-card.qualified:hover {
+            background-color: #2ea043;
+        }
+
+        .roll-card.not-qualified {
+            background-color: #484f58;
+            color: #c9d1d9;
+        }
+
+        .roll-card.not-qualified:hover {
+            background-color: #6e7681;
+        }
+
+        .roll-card.active {
+            border-color: #58a6ff;
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            color: #8b949e;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .graph-section {
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .graph-container {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .graph-caption {
+            color: #8b949e;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .graph-total-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(88, 166, 255, 0.08);
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            border-radius: 8px;
+            padding: 7px 14px;
+            margin-bottom: 24px;
+            font-size: 0.82rem;
+            color: #58a6ff;
+        }
+
+        .graph-total-badge .badge-dot {
+            width: 6px; height: 6px;
+            background: #58a6ff;
+            border-radius: 50%;
+            animation: badgePulse 2s infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .chart-area {
+            position: relative;
+            padding-left: 52px;
+            padding-bottom: 50px;
+        }
+
+        .g-y-axis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 50px;
+            width: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-right: 10px;
+            border-right: 1px solid #30363d;
+        }
+
+        .g-y-label {
+            font-size: 0.7rem;
+            color: #6e7681;
+            line-height: 1;
+        }
+
+        .g-grid-bars {
+            position: relative;
+            height: 340px;
+        }
+
+        .g-grid-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .g-grid-line {
+            position: absolute;
+            left: 0; right: 0;
+            border-top: 1px dashed #21262d;
+        }
+
+        .g-bars-row {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            padding: 0 8px;
+        }
+
+        .g-bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: flex-end;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .g-bar-col:hover .g-bar-fill {
+            filter: brightness(1.25);
+        }
+
+        .g-bar-fill {
+            width: 100%;
+            border-radius: 6px 6px 0 0;
+            position: relative;
+            transform-origin: bottom;
+            animation: gGrowUp 0.7s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+            animation-delay: var(--g-delay);
+            transform: scaleY(0);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        @keyframes gGrowUp {
+            to { transform: scaleY(1); }
+        }
+
+        .g-bar-value {
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #f0f6fc;
+            white-space: nowrap;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .g-x-labels {
+            display: flex;
+            gap: 12px;
+            padding: 10px 8px 0;
+        }
+
+        .g-x-label {
+            flex: 1;
+            text-align: center;
+            font-size: 0.72rem;
+            color: #8b949e;
+        }
+
+        .g-axis-title {
+            text-align: center;
+            font-size: 0.72rem;
+            color: #6e7681;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .bar-tooltip {
+            position: fixed;
+            background-color: #1c2333;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 12px 16px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 200;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-size: 0.85rem;
+            min-width: 180px;
+        }
+
+        .bar-tooltip.visible { opacity: 1; }
+
+        .tooltip-range {
+            color: #58a6ff;
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tooltip-count {
+            color: #3fb950;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .tooltip-sub {
+            color: #8b949e;
+            font-size: 0.78rem;
+            margin-top: 2px;
+        }
+
+        .tooltip-pct {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #30363d;
+            color: #58a6ff;
+            font-size: 0.78rem;
+        }
+
+        .graph-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 10px;
+            margin-top: 28px;
+        }
+
+        .graph-summary-item {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: border-color 0.2s;
+        }
+
+        .graph-summary-item:hover {
+            border-color: #58a6ff;
+        }
+
+        .g-swatch {
+            width: 8px;
+            height: 36px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .g-summary-label {
+            font-size: 0.72rem;
+            color: #8b949e;
+        }
+
+        .g-summary-count {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #f0f6fc;
+            margin-top: 2px;
+        }
+
+        .g-summary-meta {
+            font-size: 0.7rem;
+            color: #6e7681;
+            margin-top: 1px;
+        }
+
+        .no-data-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #8b949e;
+            font-size: 1.1rem;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            max-width: 450px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 32px;
+            height: 32px;
+            background-color: #30363d;
+            border: none;
+            border-radius: 50%;
+            color: #c9d1d9;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background-color: #f85149;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .modal-roll {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #f0f6fc;
+            margin-top: 10px;
+        }
+
+        .modal-status {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-status.qualified {
+            background-color: #238636;
+            color: white;
+        }
+
+        .modal-status.not-qualified {
+            background-color: #484f58;
+            color: #c9d1d9;
+        }
+
+        .modal-detail {
+            margin: 15px 0;
+            font-size: 1rem;
+            color: #c9d1d9;
+            line-height: 1.5;
+        }
+
+        .modal-detail strong {
+            color: #58a6ff;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ratio-box {
+            background-color: #0d1117;
+            border: 2px solid #238636;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .ratio-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #3fb950;
+            margin: 10px 0;
+        }
+
+        .ratio-calculation {
+            font-size: 0.95rem;
+            color: #8b949e;
+            margin-bottom: 5px;
+        }
+
+        .ratio-note {
+            font-size: 0.75rem;
+            color: #8b949e;
+            font-style: italic;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        .error-message {
+            color: #f85149;
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .visitor-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 14px;
+            padding: 9px 20px;
+            background: rgba(88,166,255,0.07);
+            border: 1px solid rgba(88,166,255,0.15);
+            border-radius: 40px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 0.82rem;
+            color: #8b949e;
+            font-family: 'Space Mono', monospace;
+        }
+        .visitor-dot {
+            width: 7px; height: 7px;
+            background: #3fb950;
+            border-radius: 50%;
+            animation: vPulse 2s infinite;
+            flex-shrink: 0;
+        }
+        @keyframes vPulse {
+            0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(63,185,80,0.5); }
+            50% { opacity:0.6; box-shadow: 0 0 0 4px rgba(63,185,80,0); }
+        }
+        .visitor-count {
+            font-weight: 700;
+            color: #58a6ff;
+            font-size: 0.95rem;
+        }
+
+        #scrollSmartBtn {
+            display: none;
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #1e3a5f, #2563a8);
+            color: white;
+            border: 1px solid rgba(88,166,255,0.3);
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+            transition: all 0.25s ease;
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        #scrollSmartBtn:hover {
+            transform: scale(1.12);
+            background: linear-gradient(135deg, #2563a8, #3b82f6);
+            box-shadow: 0 6px 22px rgba(88,166,255,0.4);
+        }
+
+        /* Credit bar */
+        .credit-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-top: 48px;
+            margin-bottom: 20px;
+            padding: 18px 24px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+        .credit-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .credit-label {
+            font-size: 0.68rem;
+            color: #6e7681;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+        .credit-item a {
+            color: #58a6ff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .credit-item a:hover {
+            color: #79b8ff;
+            text-decoration: underline;
+        }
+        .credit-divider {
+            width: 1px;
+            height: 28px;
+            background: #30363d;
+        }
+
+        @media (max-width: 768px) {
+            .graph-container {
+                padding: 20px 15px;
+            }
+            .g-y-axis {
+                width: 35px;
+            }
+            .g-y-label {
+                font-size: 0.6rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.4rem;
+            }
+            .rolls-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: 8px;
+            }
+            .roll-card {
+                padding: 12px 8px;
+                font-size: 0.85rem;
+            }
+            .stat-value {
+                font-size: 1.2rem;
+            }
+            .modal-roll {
+                font-size: 2rem;
+            }
+            .modal-body {
+                padding: 25px 20px;
+            }
+            .ratio-value {
+                font-size: 1.5rem;
+            }
+            .visitor-banner {
+                font-size: 0.75rem;
+            }
+            .credit-divider {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Senior Officer Exam (Job ID – 25101)</h1>
+            <p class="subtitle">Written Roll · Viva Qualifier — Complete Picture</p>
+            <div class="visitor-banner">
+                <span class="visitor-dot"></span>
+                <span>Visitors</span>
+                <span class="visitor-count" id="visitorCount">—</span>
+            </div>
+        </header>
+
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item">
+                <span class="stat-value" id="totalWritten">0</span>
+                <span class="stat-label">Total Written</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="totalViva">0</span>
+                <span class="stat-label">Total Viva</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="qualifiedCount">0</span>
+                <span class="stat-label">Viva Qualified</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="notQualifiedCount">0</span>
+                <span class="stat-label">Not Qualified</span>
+            </div>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color qualified"></div>
+                <span>Viva Qualified</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color not-qualified"></div>
+                <span>Not Selected for Viva</span>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Enter roll number to search..." autocomplete="off">
+                <button id="searchBtn" onclick="handleSearch()">Search</button>
+            </div>
+            <p class="search-instruction">Type a roll number and press Enter or click Search. Green cards = Viva Qualified.</p>
+        </div>
+
+        <div class="rolls-section">
+            <h2 class="section-title">All Written Exam Roll Numbers</h2>
+            <div class="rolls-grid" id="rollsGrid"></div>
+        </div>
+
+        <div class="graph-section">
+            <h2 class="section-title">Ratio Distribution Analysis</h2>
+            <div class="graph-container">
+                <p class="graph-caption">How many viva candidates fall in each written-to-viva competition ratio range</p>
+                <div class="graph-total-badge">
+                    <span class="badge-dot"></span>
+                    Total viva candidates: <strong id="graphTotalDisplay">—</strong> &nbsp;·&nbsp; All bars sum to this
+                </div>
+                <div id="graphContent"></div>
+            </div>
+        </div>
+
+        <!-- Credit Section -->
+        <div class="credit-bar">
+            <div class="credit-item">
+                <span class="credit-label">Hypothesis</span>
+                <a href="https://www.facebook.com/share/1GidotutT9/" target="_blank" rel="noopener">Thohidul Islam Riad</a>
+            </div>
+
+            <div class="credit-divider"></div>
+
+            <div class="credit-item">
+                <span class="credit-label">Coding</span>
+                <a href="https://plabonkumersarker.github.io/profile" target="_blank" rel="noopener">Plabon Kumer Sarker</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="bar-tooltip" id="barTooltip">
+        <div class="tooltip-range" id="ttRange"></div>
+        <div class="tooltip-count" id="ttCount"></div>
+        <div class="tooltip-sub">viva candidates</div>
+        <div class="tooltip-pct" id="ttPct"></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()" title="Close">×</button>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Smart Scroll Button -->
+    <button id="scrollSmartBtn" title="Scroll">↓</button>
+
+    <script type="module">
+        const [vivaObjects, writtenRollNumbers] = await Promise.all([
+            fetch('viva.json').then(r => r.json()),
+            fetch('writtenRolls.json').then(r => r.json())
+        ]);
+
+        /* ============================================================
+           CORE INITIALIZATION
+        ============================================================ */
+        const vivaRollsSet = new Set();
+        const rollToVivaMap = new Map();
+
+        vivaObjects.forEach(vivaObj => {
+            vivaObj.listRolls.forEach(roll => {
+                vivaRollsSet.add(roll);
+                if (!rollToVivaMap.has(roll)) {
+                    rollToVivaMap.set(roll, vivaObj);
+                }
+            });
+        });
+
+        const uniqueWrittenRolls = [...new Set(writtenRollNumbers)];
+
+        const totalWritten = writtenRollNumbers.length;
+        const totalViva = vivaRollsSet.size;
+        let qualifiedCount = 0;
+
+        uniqueWrittenRolls.forEach(roll => {
+            if (vivaRollsSet.has(roll)) {
+                qualifiedCount++;
+            }
+        });
+
+        const notQualifiedCount = uniqueWrittenRolls.length - qualifiedCount;
+
+        document.getElementById('totalWritten').textContent = totalWritten.toLocaleString();
+        document.getElementById('totalViva').textContent = totalViva.toLocaleString();
+        document.getElementById('qualifiedCount').textContent = qualifiedCount.toLocaleString();
+        document.getElementById('notQualifiedCount').textContent = notQualifiedCount.toLocaleString();
+
+        /* ============================================================
+           RATIO GRAPH
+        ============================================================ */
+        function renderRatioGraph() {
+            const graphContent = document.getElementById('graphContent');
+
+            if (vivaObjects.length === 0) {
+                graphContent.innerHTML = '<div class="no-data-message">No viva data available for ratio analysis.</div>';
+                return;
+            }
+
+            const bins = [
+                { min: 0,   max: 2,        label: '<2',    color: '#34d399', groups: 0, candidates: 0 },
+                { min: 2,   max: 2.5,      label: '2–2.5', color: '#38bdf8', groups: 0, candidates: 0 },
+                { min: 2.5, max: 3,        label: '2.5–3', color: '#818cf8', groups: 0, candidates: 0 },
+                { min: 3,   max: 3.5,      label: '3–3.5', color: '#a78bfa', groups: 0, candidates: 0 },
+                { min: 3.5, max: 4,        label: '3.5–4', color: '#f472b6', groups: 0, candidates: 0 },
+                { min: 4,   max: 5,        label: '4–5',   color: '#fb923c', groups: 0, candidates: 0 },
+                { min: 5,   max: 7,        label: '5–7',   color: '#f87171', groups: 0, candidates: 0 },
+                { min: 7,   max: Infinity, label: '≥7',    color: '#ef4444', groups: 0, candidates: 0 },
+            ];
+
+            vivaObjects.forEach(vivaObj => {
+                const writtenInRange = countWrittenInRange(vivaObj.firstRoll, vivaObj.lastRoll);
+                const ratio = writtenInRange / vivaObj.totalCandidate;
+                for (const b of bins) {
+                    if (ratio >= b.min && ratio < b.max) {
+                        b.groups++;
+                        b.candidates += vivaObj.totalCandidate;
+                        break;
+                    }
+                }
+            });
+
+            const activeBins = bins.filter(b => b.candidates > 0);
+            const total = activeBins.reduce((s, b) => s + b.candidates, 0);
+
+            document.getElementById('graphTotalDisplay').textContent = total.toLocaleString();
+
+            const yMax   = Math.ceil(Math.max(...activeBins.map(b => b.candidates)) / 200) * 200 || 200;
+            const STEPS  = 6;
+
+            let yAxisHTML = '<div class="g-y-axis">';
+            for (let i = STEPS; i >= 0; i--) {
+                const v = Math.round((yMax / STEPS) * i);
+                const label = v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v;
+                yAxisHTML += `<div class="g-y-label">${label}</div>`;
+            }
+            yAxisHTML += '</div>';
+
+            let gridHTML = '<div class="g-grid-lines">';
+            for (let i = 0; i <= STEPS; i++) {
+                gridHTML += `<div class="g-grid-line" style="bottom:${(i/STEPS)*100}%"></div>`;
+            }
+            gridHTML += '</div>';
+
+            let barsHTML = '<div class="g-bars-row">';
+            activeBins.forEach((bin, idx) => {
+                const heightPct = (bin.candidates / yMax) * 100;
+                barsHTML += `
+                    <div class="g-bar-col"
+                         data-label="${bin.label}"
+                         data-candidates="${bin.candidates}"
+                         data-groups="${bin.groups}"
+                         data-pct="${((bin.candidates/total)*100).toFixed(1)}">
+                        <div class="g-bar-fill"
+                             style="height:${heightPct}%;
+                                    background:linear-gradient(180deg,${bin.color}dd,${bin.color}77);
+                                    --g-delay:${idx*0.08}s">
+                            <span class="g-bar-value">${bin.candidates.toLocaleString()}</span>
+                        </div>
+                    </div>`;
+            });
+            barsHTML += '</div>';
+
+            let xHTML = '<div class="g-x-labels">';
+            activeBins.forEach(bin => {
+                xHTML += `<div class="g-x-label">${bin.label}</div>`;
+            });
+            xHTML += '</div>';
+
+            let summaryHTML = '<div class="graph-summary">';
+            activeBins.forEach(bin => {
+                summaryHTML += `
+                    <div class="graph-summary-item">
+                        <div class="g-swatch" style="background:${bin.color}"></div>
+                        <div>
+                            <div class="g-summary-label">Ratio ${bin.label}</div>
+                            <div class="g-summary-count">${bin.candidates.toLocaleString()} candidates</div>
+                            <div class="g-summary-meta">${bin.groups} group${bin.groups !== 1 ? 's' : ''} · ${((bin.candidates/total)*100).toFixed(1)}%</div>
+                        </div>
+                    </div>`;
+            });
+            summaryHTML += '</div>';
+
+            graphContent.innerHTML = `
+                <div class="chart-area">
+                    ${yAxisHTML}
+                    <div class="g-grid-bars">
+                        ${gridHTML}
+                        ${barsHTML}
+                    </div>
+                    ${xHTML}
+                    <p class="g-axis-title">Competition Ratio (written ÷ viva)</p>
+                </div>
+                ${summaryHTML}`;
+
+            setupGraphTooltips();
+        }
+
+        function setupGraphTooltips() {
+            const tooltip = document.getElementById('barTooltip');
+            const ttRange = document.getElementById('ttRange');
+            const ttCount = document.getElementById('ttCount');
+            const ttPct   = document.getElementById('ttPct');
+
+            document.querySelectorAll('.g-bar-col').forEach(col => {
+                col.addEventListener('mouseenter', () => {
+                    ttRange.textContent = 'Ratio ' + col.dataset.label;
+                    ttCount.textContent = parseInt(col.dataset.candidates).toLocaleString();
+                    ttPct.textContent   = col.dataset.pct + '% of total · ' + col.dataset.groups + ' group' + (col.dataset.groups != 1 ? 's' : '');
+                    tooltip.classList.add('visible');
+                });
+                col.addEventListener('mousemove', e => {
+                    tooltip.style.left = (e.clientX + 14) + 'px';
+                    tooltip.style.top  = (e.clientY - 70) + 'px';
+                });
+                col.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+            });
+        }
+
+        /* ============================================================
+           UTILITY FUNCTIONS
+        ============================================================ */
+        function isVivaQualified(roll) {
+            return vivaRollsSet.has(roll);
+        }
+
+        function findVivaObjectByRoll(roll) {
+            return rollToVivaMap.get(roll) || null;
+        }
+
+        function calculateWrittenCountInRange(firstRoll, lastRoll) {
+            let count = 0;
+            uniqueWrittenRolls.forEach(roll => {
+                if (roll >= firstRoll && roll <= lastRoll) {
+                    count++;
+                }
+            });
+            return count;
+        }
+
+        function countWrittenInRange(firstRoll, lastRoll) {
+            return calculateWrittenCountInRange(firstRoll, lastRoll);
+        }
+
+        function openModal(content) {
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = content;
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modalOverlay = document.getElementById('modalOverlay');
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeModalOnOverlay(event) {
+            if (event.target === event.currentTarget) {
+                closeModal();
+            }
+        }
+
+        function highlightRoll(roll) {
+            document.querySelectorAll('.roll-card').forEach(card => {
+                card.classList.remove('active');
+            });
+
+            const rollCards = document.querySelectorAll('.roll-card');
+            for (let card of rollCards) {
+                if (parseInt(card.dataset.roll) === roll) {
+                    card.classList.add('active');
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    break;
+                }
+            }
+        }
+
+        function handleSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const searchValue = searchInput.value.trim().replace(/\s/g, '');
+
+            if (!searchValue) {
+                return;
+            }
+
+            const searchRoll = parseInt(searchValue);
+
+            if (isNaN(searchRoll)) {
+                const content = `
+                    <div class="modal-header">
+                        <span class="modal-status not-qualified">Invalid Input</span>
+                    </div>
+                    <div class="error-message">Please enter a valid roll number.</div>
+                `;
+                openModal(content);
+                return;
+            }
+
+            if (!uniqueWrittenRolls.includes(searchRoll)) {
+                const content = `
+                    <div class="modal-header">
+                        <span class="modal-status not-qualified">Not Found</span>
+                        <div class="modal-roll">${searchRoll}</div>
+                    </div>
+                    <div class="error-message">This roll number was not found in the written exam list.</div>
+                `;
+                openModal(content);
+                return;
+            }
+
+            highlightRoll(searchRoll);
+            showRollDetails(searchRoll);
+        }
+
+        /* ============================================================
+           ROLL GRID
+        ============================================================ */
+        function renderRollGrid() {
+            const grid = document.getElementById('rollsGrid');
+            grid.innerHTML = '';
+            const sortedRolls = [...uniqueWrittenRolls].sort((a, b) => a - b);
+            sortedRolls.forEach(roll => {
+                const isViva = isVivaQualified(roll);
+                const card = document.createElement('div');
+                card.className = isViva ? 'roll-card qualified' : 'roll-card not-qualified';
+                card.textContent = roll;
+                card.dataset.roll = roll;
+                card.addEventListener('click', () => {
+                    highlightRoll(roll);
+                    showRollDetails(roll);
+                });
+                grid.appendChild(card);
+            });
+        }
+
+        /* ============================================================
+           SHOW ROLL DETAILS
+        ============================================================ */
+        function showRollDetails(roll) {
+            const isViva = isVivaQualified(roll);
+
+            if (isViva) {
+                const vivaObj = findVivaObjectByRoll(roll);
+                let writtenInRange = 0, ratio = '—', groupIdx = -1;
+                if (vivaObj) {
+                    writtenInRange = calculateWrittenCountInRange(vivaObj.firstRoll, vivaObj.lastRoll);
+                    ratio = (writtenInRange / vivaObj.totalCandidate).toFixed(2);
+                    groupIdx = vivaObjects.indexOf(vivaObj) + 1;
+                }
+
+                const content = `
+                    <div class="modal-header">
+                        <span class="modal-status qualified">Qualified for Viva</span>
+                        <div class="modal-roll">${roll}</div>
+                    </div>
+                    <div class="modal-detail">
+                        <strong>Viva Date</strong>
+                        ${vivaObj ? vivaObj.reportingTime : '—'}
+                    </div>
+                    <div class="ratio-box">
+                        <div class="ratio-calculation">Group ${groupIdx} · Written candidates in range: ${writtenInRange}</div>
+                        <div class="ratio-calculation">Viva candidates: ${vivaObj ? vivaObj.totalCandidate : '—'}</div>
+                        <div class="ratio-value">${writtenInRange} / ${vivaObj ? vivaObj.totalCandidate : '—'} = ${ratio}</div>
+                        <div class="ratio-note">Caution: Ratio is just a number—it doesn't define your future.</div>
+                    </div>
+                `;
+                openModal(content);
+            } else {
+                const content = `
+                    <div class="modal-header">
+                        <span class="modal-status not-qualified">Not Qualified</span>
+                        <div class="modal-roll">${roll}</div>
+                    </div>
+                    <div class="error-message">Sorry, this candidate didn't qualify in written exam.</div>
+                `;
+                openModal(content);
+            }
+        }
+
+        /* ============================================================
+           VISITOR COUNTER (dedicated for SO-25101)
+        ============================================================ */
+        async function fetchVisitorCount() {
+            const KEY = 'plabonkumersarker-so25101-v1';
+            const SESSION_KEY = 'so25101_archive_visited';
+            const el = document.getElementById('visitorCount');
+
+            if (!el) return;
+
+            const hasBeenCounted = sessionStorage.getItem(SESSION_KEY);
+            const action = hasBeenCounted ? 'get' : 'hit';
+            const endpoint = `https://countapi.mileshilliard.com/api/v1/${action}/${KEY}`;
+
+            try {
+                const res = await fetch(endpoint, { cache: 'no-cache' });
+                if (!res.ok) throw new Error('API fail');
+
+                const data = await res.json();
+
+                if (data && typeof data.value === 'number') {
+                    el.textContent = data.value.toLocaleString();
+                    if (!hasBeenCounted) {
+                        sessionStorage.setItem(SESSION_KEY, 'true');
+                    }
+                } else {
+                    el.textContent = '—';
+                }
+            } catch (e) {
+                console.error("Visitor Counter Error:", e);
+                el.textContent = '—';
+            }
+        }
+
+        /* ============================================================
+           SMART SCROLL BUTTON
+        ============================================================ */
+        (function initSmartScroll() {
+            const btn = document.getElementById('scrollSmartBtn');
+            function updateBtn() {
+                const atBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 100);
+                const scrolled = window.scrollY > 300;
+                if (!scrolled && !atBottom) {
+                    btn.style.display = 'none';
+                    return;
+                }
+                btn.style.display = 'flex';
+                if (atBottom || window.scrollY > document.documentElement.scrollHeight / 2) {
+                    btn.textContent = '↑';
+                    btn.title = 'Back to top';
+                    btn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    btn.textContent = '↓';
+                    btn.title = 'Go to bottom';
+                    btn.onclick = () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+                }
+            }
+            window.addEventListener('scroll', updateBtn, { passive: true });
+            updateBtn();
+        })();
+
+        /* ============================================================
+           EVENT BINDINGS
+        ============================================================ */
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSearch();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        /* ============================================================
+           INIT
+        ============================================================ */
+        renderRollGrid();
+        renderRatioGraph();
+        fetchVisitorCount();
+    </script>
+</body>
+</html>
